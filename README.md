@@ -1,49 +1,48 @@
-A server app built using [Shelf](https://pub.dev/packages/shelf),
-configured to enable running with [Docker](https://www.docker.com/).
+# 📚 API de Gestão de Livros (CRUD com Dart)
 
-This sample code handles HTTP GET requests to `/` and `/echo/<message>`
+Este projeto consiste numa API RESTful simples desenvolvida exclusivamente em Dart. Implementa um CRUD completo para a entidade **Livros**, com persistência de dados em base de dados e proteção de rotas através de um middleware de autenticação.
 
-# Running the sample
+## 👨‍💻 Autoria
+* **Desenvolvido por:** Daniel Bilibio
+* **RA:** 1131552
 
-## Running with the Dart SDK
+---
 
-You can run the example with the [Dart SDK](https://dart.dev/get-dart)
-like this:
+## 🚀 Tecnologias Utilizadas
 
-```
-$ dart run bin/server.dart
-Server listening on port 8080
-```
+* **Linguagem:** Dart
+* **Servidor e Rotas:** `shelf` e `shelf_router`
+* **Base de Dados:** SQLite (`sqlite3`)
 
-And then from a second terminal:
-```
-$ curl http://0.0.0.0:8080
-Hello, World!
-$ curl http://0.0.0.0:8080/echo/I_love_Dart
-I_love_Dart
-```
+---
 
-## Running with Docker
+## 🔒 Autenticação
 
-If you have [Docker Desktop](https://www.docker.com/get-started) installed, you
-can build and run with the `docker` command:
+A API possui uma camada de segurança via middleware. Todas as rotas estão protegidas e exigem um *token* de acesso no cabeçalho (*Header*) da requisição HTTP.
 
-```
-$ docker build . -t myserver
-$ docker run -it -p 8080:8080 myserver
-Server listening on port 8080
-```
+* **Chave (Key):** `Authorization`
+* **Valor (Value):** `123` (ou `Bearer 123`)
 
-And then from a second terminal:
-```
-$ curl http://0.0.0.0:8080
-Hello, World!
-$ curl http://0.0.0.0:8080/echo/I_love_Dart
-I_love_Dart
-```
+*Nota: Requisições sem este cabeçalho ou com o token incorreto receberão o código de erro HTTP 403 (Acesso Negado).*
 
-You should see the logging printed in the first terminal:
-```
-2021-05-06T15:47:04.620417  0:00:00.000158 GET     [200] /
-2021-05-06T15:47:08.392928  0:00:00.001216 GET     [200] /echo/I_love_Dart
-```
+---
+
+## ⚙️ Rotas da API (Endpoints)
+
+Abaixo estão as operações disponíveis para gerir os livros:
+
+| Método | Rota | Descrição |
+| :--- | :--- | :--- |
+| **POST** | `/livros` | Regista um novo livro na base de dados. |
+| **GET** | `/livros` | Lista todos os livros guardados. |
+| **GET** | `/livros/<id>` | Busca um livro específico através do seu ID. |
+| **PUT** | `/livros/<id>` | Atualiza os dados (título e autor) de um livro existente. |
+| **DELETE** | `/livros/<id>` | Elimina um livro da base de dados. |
+
+### Exemplo de Corpo da Requisição (POST / PUT)
+Para inserir ou atualizar um livro, deves enviar um JSON no corpo (*Body*) da requisição:
+```json
+{
+  "title": "O Senhor dos Anéis",
+  "author": "J.R.R. Tolkien"
+}
